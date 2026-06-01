@@ -151,3 +151,37 @@ INSERT INTO orders (customer_id, order_id) VALUES
 
 select * from customers c left join orders o on c.customer_id = o.customer_id ;
 /*where c.name is null or o.customer_id is null;*/
+
+
+--Model DB
+
+create table stud
+(roll_no int primary key identity(1,1),
+name varchar(30));
+
+create table submis
+(roll_no int primary key references stud(roll_no),
+status varchar(30) default('Submitted'));
+
+insert into stud (name) values 
+('Riya'),
+('Ayaan '),
+('Priya '),
+('Meena ');
+
+insert into submis(roll_no) values 
+(1),
+(2),
+(3);
+
+select COALESCE(s.roll_no,su.roll_no),name,status,subject
+from stud s left join submis su on s.roll_no = su.roll_no order by status desc,name;
+
+select COALESCE(s.roll_no,su.roll_no),name,subject
+from stud s left join submis su on s.roll_no = su.roll_no where status is not null order by status desc,name ;
+
+alter table submis add subject varchar(10) default('Maths');
+alter table submis drop column subject ;
+alter table submis drop PK__submis__9560EEE1CAFA0167 ; 
+
+update submis set subject = 'English' where roll_no =2
